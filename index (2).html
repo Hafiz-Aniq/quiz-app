@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Quiz App</title>
+</head>
+<body>
+    <style>body {
+        font-family:  'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        text-align: center;
+        background-color: #d2e8c4;
+        /* color:#c0ca74 ; */
+    }
+    
+    .quiz-container {
+        width: 500px ;
+        margin: 0 auto;
+        margin-top: 120px;
+        background-color:#e4eec9 ;
+        border-radius: 10px;
+        border: #ccc solid;
+    }
+    
+    .question-container {
+        background-color: #d2e8c4;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px;
+    }
+    
+    .options {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .option {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    #result {
+        margin: 10px;
+        font-weight: bold;
+    }
+    </style>
+    <div class="quiz-container">
+        <h1>Quiz App</h1>
+            <div id="timer" class="timer">Time Left: 10 seconds</div> <!-- Add this line for the timer -->
+        <div class="question-container">
+            <h2 id="question">Question 1: What is the capital of France?</h2>
+        </div>
+        <div class="options">
+            <button class="option" onclick="checkAnswer('Paris')">Paris</button>
+            <!-- Add other answer buttons here -->
+        </div>
+        <div id="result"></div>
+    </div>
+
+<script>const quizData = [
+    {
+      question: "What is the capital of France?",
+      options: ["Berlin", "Madrid", "Paris", "Rome"],
+      correctAnswer: "Paris",
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Mars", "Venus", "Jupiter", "Saturn"],
+      correctAnswer: "Mars",
+    },
+    {
+      question: "Who is the author of 'To Kill a Mockingbird'?",
+      options: ["Charles Dickens", "Jane Austen", "Harper Lee", "Mark Twain"],
+      correctAnswer: "Harper Lee",
+    },
+    {
+      question: "Which gas do plants absorb from the atmosphere?",
+      options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+      correctAnswer: "Carbon Dioxide",
+    },
+    {
+      question: "What is the largest mammal in the world?",
+      options: ["African Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+      correctAnswer: "Blue Whale",
+    },
+    {
+      question: "What is the chemical symbol for gold?",
+      options: ["Au", "Ag", "Fe", "Hg"],
+      correctAnswer: "Au",
+    },
+    {
+      question: "Which country is known as the Land of the Rising Sun?",
+      options: ["China", "South Korea", "Japan", "Thailand"],
+      correctAnswer: "Japan",
+    },
+    {
+      question: "Who painted the Mona Lisa?",
+      options: ["Pablo Picasso", "Leonardo da Vinci", "Vincent van Gogh", "Michelangelo"],
+      correctAnswer: "Leonardo da Vinci",
+    },
+    {
+      question: "Which planet is known as the Morning Star or Evening Star?",
+      options: ["Mars", "Venus", "Jupiter", "Saturn"],
+      correctAnswer: "Venus",
+    },
+    {
+      question: "In which year did Christopher Columbus discover America?",
+      options: ["1492", "1521", "1607", "1776"],
+      correctAnswer: "1492",
+    }
+  ];
+  
+  
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let timer;
+  
+  function showQuestion() {
+      const questionText = document.getElementById("question");
+      questionText.textContent = `Question ${currentQuestionIndex + 1}: ${quizData[currentQuestionIndex].question}`;
+  
+      const options = document.querySelector(".options");
+      options.innerHTML = "";
+  
+      for (let i = 0; i < quizData[currentQuestionIndex].options.length; i++) {
+          const option = quizData[currentQuestionIndex].options[i];
+          const button = document.createElement("button");
+          button.classList.add("option");
+          button.textContent = option;
+          button.addEventListener("click", () => checkAnswer(option));
+          options.appendChild(button);
+      }
+  }
+  
+  function checkAnswer(selectedAnswer) {
+      clearTimeout(timer);
+      const correctAnswer = quizData[currentQuestionIndex].correctAnswer;
+      if (selectedAnswer === correctAnswer) {
+          score += 10;
+      }
+  
+      currentQuestionIndex++;
+  
+      if (currentQuestionIndex < quizData.length) {
+          showQuestion();
+          startTimer(10); // Set the timer for 10 seconds
+      } else {
+          showResult();
+      }
+  }
+  
+  function showResult() {
+      const quizContainer = document.querySelector(".quiz-container");
+      quizContainer.innerHTML = `<h1>Quiz Completed</h1><p>Your score: ${score} / ${quizData.length * 10}</p>`;
+  }
+  
+  function startTimer(seconds) {
+      const timerElement = document.getElementById("timer");
+      timerElement.textContent = `Time Left: ${seconds} seconds`;
+      
+      timer = setInterval(() => {
+          seconds--;
+          if (seconds < 0) {
+              clearTimeout(timer);
+              checkAnswer(); // Move to the next question
+          } else {
+              timerElement.textContent = `Time Left: ${seconds} seconds`;
+          }
+      }, 1000);
+  }
+  
+  showQuestion();
+  startTimer(10); // Start the first timer
+  
+
+</script>
+</body>
+</html>
